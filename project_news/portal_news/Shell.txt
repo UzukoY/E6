@@ -1,0 +1,60 @@
+python manage.py shell # Начинаем работу
+from news.models import * # Импортируем ВСЁ
+
+# Создаем пользователей
+user1 = User.objects.create_user('Yulia')
+user2 = User.objects.create_user('Ksenia')
+
+# Создаем авторов, связанных с пользователями
+author_Yulia = Author.objects.create(author_user = user1)
+author_Ksenia = Author.objects.create(author_user = user2)
+
+# Создаем категории
+cat_nature = Category.objects.create(category_name = 'Природа')
+cat_sport = Category.objects.create(category_name = 'Спорт')
+cat_music = Category.objects.create(category_name = 'Музыка')
+cat_science = Category.objects.create(category_name = 'Наука')
+
+# Создаем две статьи и одну новость
+article1 = Post.objects.create(author = author_Yulia, post_type = 'AR', post_title = 'Прогулки на природе спасут не только вас, но и планету', post_text = 'Ученые выяснили, что прогулки на природе полезны не только для здоровья людей, но и для здоровья планеты. Исследования показывают, что время, проведенное на природе, положительно влияет на экологические привычки человека. Врачи теперь могут выписывать особые рецепты — «Земляные RX».')
+article2 = Post.objects.create(author = author_Ksenia, post_type = 'AR', post_title = 'Польза игры на барабанах', post_text = 'Польза игры на барабанах распространяется на физическое и эмоциональное состояние человека. Вы не только учитесь музыке, но и делаете это с пользой для своего здоровья. Часто именно по этой причине родители отдают своих детей в музыкальные школы, где они смогут всесторонне развиваться.')
+news1 = Post.objects.create(author = author_Yulia, post_type = 'NE', post_title = 'Обнаружена самая глубокая на сегодняшний день Голубая дыра у берегов Мексики', post_text = 'Учёные-океанологи в журнале Frontiers in Marine Science опубликовали результаты исследования самой глубокой, как оказалось, голубой дыры. Это голубая дыра «Таам Джа», расположенная у побережья Мексики в заливе Четумаль.')
+
+# Присваиваем категории статьям по id
+PostCategory.objects.create(category=Category.objects.get(category_name = 'Природа'), post = Post.objects.get(id = 1))
+PostCategory.objects.create(category=Category.objects.get(category_name = 'Наука'), post = Post.objects.get(id = 1))
+PostCategory.objects.create(category=Category.objects.get(category_name = 'Музыка'), post = Post.objects.get(id = 2))
+PostCategory.objects.create(category=Category.objects.get(category_name = 'Природа'), post = Post.objects.get(id = 3))
+
+# Создаем комментарии
+From news.models import Comment
+comment1 = Comment.object.create(User.objects.create_user('New_User1'), related post = Post.objects.get(id = 1), comment_text = 'Не зря люблю гулять')
+comment2 = Comment.object.create(User.objects.create_user('New_User2'), related post = Post.objects.get(id = 2), comment_text = 'Всегда хотела научиться играть на барабанах(')
+comment3 = Comment.object.create(User.objects.create_user('New_User3'), related post = Post.objects.get(id = 3), comment_text = 'Как мало мы до сих пор знаем об океанах...')
+comment4 = Comment.object.create(User.objects.create_user('New_User4'), related post = Post.objects.get(id = 1), comment_text = 'Теперь буду чаще гулять по лесу!')
+
+# Меняем рейтинг комментариев и постов
+comment1.like()
+comment2.like()
+comment4.dislike()
+comment2.like()
+
+article1.like()
+article2.like()
+news1.dislike()
+news1.like
+article1.like()
+
+# Обновляем рейтинг авторов
+author1 = Author.objects.get(id=1)
+author1.update_rating()
+author2 = Author.objects.get(id=2)
+author2.update_rating()
+
+Author.objects.all().order_by('-user_rating').values('author__username','user_rating').first() #Вывод имени лучшего пользователя по рейтингу
+Author.objects.all().order_by('-post_rating').select_related('author__author').values('post.created','author__author__username','post_rating','post_title').first() #Выводим лучшую статью, имя автора, дату и рейтинг
+
+# Выводим все комментарии к лучшей статье
+best_post = Post.objects.all().order_by('-post_rating').values('id').first()
+id_max = best_post.get('id')
+Comment.objects.filter(related_post_id=id_max).values('comment_text')
