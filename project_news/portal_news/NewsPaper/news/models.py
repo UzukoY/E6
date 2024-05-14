@@ -1,12 +1,14 @@
 from django.db import models
-
-from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
+from django.shortcuts import reverse
 
 class Author(models.Model):
     author_user = models.OneToOneField(User, on_delete=models.CASCADE)
     author_rating = models.DecimalField(default=0, decimal_places=2, max_digits=5)  # 2 знака после запятой
+
+    def __str__(self):
+        return self.author_user
 
     def update_rating(self):
         posts_rate = self.post_set.aggregate(total_P_rating=Sum('post_rating'))
@@ -20,9 +22,21 @@ class Author(models.Model):
         self.author_rating = pRat *3 + cRat
         self.save()
 
+    class Meta:
+        verbose_name = 'Автор'
+        verbose_name_plural = 'Авторы'
+
 
 class Category(models.Model):
     category_name = models.CharField(max_length=64, unique=True) # Принято выбирать число по прогрессии 2-4-8-16-32-64...
+    description = models.TextField()
+
+    def __str__(self):
+        return self.category_name
+
+    class Meta:
+        verbose_name = 'Категория'
+        verbose_name_plural = 'Категории'
 
 
 class Post(models.Model):
@@ -33,6 +47,9 @@ class Post(models.Model):
         (news_post, 'Новость'),
         (article, 'Статья')
     ]
+
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'pk': self.pk})
 
     post_type = models.CharField(max_length=2, choices=POST_TYPES, default=news_post)
     post_created = models.DateTimeField(auto_now_add=True) # Автоматическое добавление даты создания
@@ -66,9 +83,9 @@ class Comment(models.Model):
     comment_rating = models.IntegerField(default=0)
 
     def like(self):
-        self.post_rating += 1
+        self.comment_rating += 1
         self.save()
 
     def dislike(self):
-        self.post_rating -= 1
+        self.comment_rating -= 1
         self.save()
