@@ -7,7 +7,7 @@
 <body>
 {% for post in posts %} <!--Пишем ключ, который передали из views-->
 <p>{{ post.post_title }} : {{post.post_created|date:"d.m.y"}}</p>
-<a href="{{% post.get_absolute_url %}}"> Posts url</a>
+<a href="{{ post.get_absolute_url }}"> Posts url</a>
 {% endfor %}
 {% block title %}
 {% endblock %}

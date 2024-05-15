@@ -8,7 +8,7 @@ class Author(models.Model):
     author_rating = models.DecimalField(default=0, decimal_places=2, max_digits=5)  # 2 знака после запятой
 
     def __str__(self):
-        return self.author_user
+        return f'{self.author_user}'
 
     def update_rating(self):
         posts_rate = self.post_set.aggregate(total_P_rating=Sum('post_rating'))
@@ -48,6 +48,11 @@ class Post(models.Model):
         (article, 'Статья')
     ]
 
+
+    class Meta:
+        verbose_name = 'Пост'
+        verbose_name_plural = 'Посты'
+
     def get_absolute_url(self):
         return reverse('detail', kwargs={'pk': self.pk})
 
@@ -57,6 +62,9 @@ class Post(models.Model):
     post_title = models.CharField(max_length=256)
     post_text = models.TextField()
     post_rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.post_title
 
     def like(self):
         self.post_rating += 1

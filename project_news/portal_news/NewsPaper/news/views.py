@@ -8,8 +8,8 @@ def index(request):
     return render(request, 'index.html', context={'posts': posts})
 
 def detail(request, pk):
-    post = Post.object.get(pk__iexact=pk)
-    return render(request, "details.html", context={'post':post})
+    post = Post.objects.get(pk__iexact=pk)
+    return render(request, "details.html", context={'post': post.post_text})
 
 
 # class AuthorList(ListView):
