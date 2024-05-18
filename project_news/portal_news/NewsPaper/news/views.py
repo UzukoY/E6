@@ -24,14 +24,15 @@ class AuthorList(ListView): # работает со списком
     # # Его надо указать, чтобы обратиться к списку объектов в html-шаблоне.
     context_object_name = 'Authors'
 
-class Post(DetailView): #принимает только 1 объект
+class PostDetail(DetailView): #принимает только 1 объект
     model = Post
     context_object_name = 'Post'
 
 class PostList(ListView):
     model = Post
     context_object_name = 'Posts'
-    template_name = 'NewsPaper/templates/flatpages/news.html'
-    ordering = 'post_created'
+    template_name = 'flatpages/news.html'
+    ordering = '-post_created'
+
 
 

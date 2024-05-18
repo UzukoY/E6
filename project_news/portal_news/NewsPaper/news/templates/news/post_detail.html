@@ -1,3 +1,5 @@
+{% extends 'flatpages/default.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,9 +7,16 @@
     <title>Title</title>
 </head>
 <body>
-{{ Post.author }} <br>
-{{ Post.post_title }} <br>
-{{ Post.post_text }}
+{% block title %}
+{{ Post.author}} <br>
+{{ Post.post_created}} <br>
+<hr>
+{% endblock title %}
 
+{% block content %}
+{{ Post.post_title }} <br>
+<br>
+{{ Post.post_text }}
+{% endblock content %}
 </body>
 </html>

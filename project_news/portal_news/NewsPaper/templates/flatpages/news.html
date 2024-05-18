@@ -18,23 +18,18 @@ Posts
                <td>Автор</td>
                <td>Заголовок</td>
                <td>Описание</td>
-
-
            </tr>
-
            {% for post in Posts %}
            <tr>
                <td>{{ post.post_created|date:'d M Y' }}</td>
                <td>{{ post.author }}</td>
                <td>{{ post.post_title }}</td>
-               <td>{{ post.post_text|truncatewords:2 }}</td>
+               <td>{{ post.post_text|truncatechars:20 }}</td>
 
-               <!-- Используем наш фильтр -->
-               <td>{{ post.post_created }}</td>
            </tr>
            {% endfor %}
-
        </table>
+       <hr>
    {% else %}
        <h2>Новостей нет!</h2>!
    {% endif %}
