@@ -5,9 +5,9 @@
     <title>Title</title>
 </head>
 <body>
-{{ Post.author }} <br>
-{{ Post.post_title }} <br>
-{{ Post.post_text }}
-TEST TEST
+{% for author in Authors %}
+<p>{{ author.author_user }}</p>
+{% endfor %}
+
 </body>
 </html>

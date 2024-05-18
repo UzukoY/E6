@@ -1,15 +1,41 @@
 {% extends 'flatpages/default.html' %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ flatpage.title }}</title>
-</head>
 
-<body>
-{{ flatpage.content }}
-<hr>
-{% include 'flatpages/inc.html' %}
-<h2></h2>
-</body>
-</html>
+{% load custom_filters %}
+
+{% block title %}
+Posts
+{% endblock title %}
+
+{% block content %}
+   <h1>Все новости</h1>
+   <h3>{{ time_now|date:'d M Y' }}</h3>
+
+   <hr>
+   {% if Posts %}
+       <table>
+           <tr>
+               <td>Дата публикации</td>
+               <td>Автор</td>
+               <td>Заголовок</td>
+               <td>Описание</td>
+
+
+           </tr>
+
+           {% for post in Posts %}
+           <tr>
+               <td>{{ post.post_created|date:'d M Y' }}</td>
+               <td>{{ post.author }}</td>
+               <td>{{ post.post_title }}</td>
+               <td>{{ post.post_text|truncatewords:2 }}</td>
+
+               <!-- Используем наш фильтр -->
+               <td>{{ post.post_created }}</td>
+           </tr>
+           {% endfor %}
+
+       </table>
+   {% else %}
+       <h2>Новостей нет!</h2>!
+   {% endif %}
+{% endblock content %}

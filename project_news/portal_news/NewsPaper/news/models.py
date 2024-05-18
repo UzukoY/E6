@@ -7,6 +7,7 @@ class Author(models.Model):
     author_user = models.OneToOneField(User, on_delete=models.CASCADE)
     author_rating = models.DecimalField(default=0, decimal_places=2, max_digits=5)  # 2 знака после запятой
 
+
     def __str__(self):
         return f'{self.author_user}'
 
@@ -62,6 +63,8 @@ class Post(models.Model):
     post_title = models.CharField(max_length=256)
     post_text = models.TextField()
     post_rating = models.IntegerField(default=0)
+    template_name = 'NewsPaper/news/templates/news/post_detail.html'
+
 
     def __str__(self):
         return self.post_title
@@ -89,6 +92,10 @@ class Comment(models.Model):
     comment_text = models.TextField()
     comment_created = models.DateTimeField(auto_now_add=True)
     comment_rating = models.IntegerField(default=0)
+
+    class Meta:
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
 
     def like(self):
         self.comment_rating += 1
