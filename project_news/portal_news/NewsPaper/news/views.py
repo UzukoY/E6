@@ -1,5 +1,6 @@
+from django.urls import reverse_lazy
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import *
 from .filters import *
 from .forms import *
@@ -36,7 +37,7 @@ class PostList(ListView):
     context_object_name = 'Posts'
     template_name = 'flatpages/news.html'
     ordering = '-post_created'
-    paginate_by = 3 # количество записей на странице
+    paginate_by = 10 # количество записей на странице
 
     # Переопределяем функцию получения списка товаров
     def get_queryset(self):
@@ -67,4 +68,21 @@ def create_post(request):
     else:
         form = PostForm()
         context = { 'form': form, }
-        return render(request, 'post_edit.html', context)
+        return render(request, 'posts_edit.html', context)
+
+
+class PostCreate(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'posts_edit.html'
+
+class PostUpdate(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'posts_edit.html'
+
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('post_list')

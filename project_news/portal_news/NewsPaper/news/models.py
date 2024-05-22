@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import reverse
 from django.contrib import admin
+from django.core.validators import MinValueValidator
 
 class Author(models.Model):
     author_user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -65,6 +66,9 @@ class Post(models.Model):
     post_text = models.TextField()
     post_rating = models.IntegerField(default=0)
     template_name = 'NewsPaper/news/templates/news/post_detail.html'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
 
     def __str__(self):

@@ -1,5 +1,6 @@
 from django_filters import *
 from .models import *
+from django.forms import DateTimeInput
 
 # Создаем свой набор фильтров для модели Post.
 # FilterSet, который мы наследуем,
@@ -11,6 +12,14 @@ class PostFilter(FilterSet):
         label='Category name'
     )
 
+    added_after = DateTimeFilter(
+        field_name='post_created',
+        lookup_expr='gt',
+        widget=DateTimeInput(
+            format='%Y-%m-%dT%H:%M',
+            attrs={'type': 'datetime-local'})
+    )
+
     class Meta:
        # В Meta классе мы должны указать Django модель,
        # в которой будем фильтровать записи.
@@ -20,8 +29,5 @@ class PostFilter(FilterSet):
        fields = {
            # поиск по названию
            'post_title': ['icontains'],
-           'post_created': [
-               'lt',  # дата должна быть меньше или равна указанной
-               'gt',  # дата должна быть больше или равна указанной
-           ],
+           'post_text': ['icontains'],
        }
