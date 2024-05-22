@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import Sum
 from django.shortcuts import reverse
+from django.contrib import admin
 
 class Author(models.Model):
     author_user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -84,6 +85,7 @@ class Post(models.Model):
 class PostCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
 
 
 class Comment(models.Model):

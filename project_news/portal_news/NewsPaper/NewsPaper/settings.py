@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'fpages',
 # 'templatetags',
     'simpleapp',
+    'django_filters',
+
 ]
 
 SITE_ID = 1

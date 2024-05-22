@@ -7,5 +7,5 @@ urlpatterns = [
     path('post/<int:pk>/', PostDetail.as_view()), # cтало так
     path('authorlist/', AuthorList.as_view()),
     path('', PostList.as_view()),
-
+    path('create/', create_post,name = 'post_create'),
 ]
