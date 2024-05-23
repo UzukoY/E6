@@ -19,6 +19,11 @@ Posts
 
    <h3>{{ time_now|date:'d M Y' }}</h3>
 
+{# Теперь будем проверять не request.user.is_authenticated, а конкретные права #}
+    {% if perms.news.add_post %}
+    <a href="{% url 'post_create' %}">Добавить пост</a>
+    {% endif %}
+
    <hr>
    {% if Posts %}
        <table>
@@ -27,6 +32,12 @@ Posts
                <td>Автор</td>
                <td>Заголовок</td>
                <td>Описание</td>
+
+               {# Условие получается составным. #}
+                {% if perms.news.change_post or perms.news.delete_post %}
+                <td>Действия</td>
+                {% endif %}
+
            </tr>
            {% for post in Posts %}
            <tr>
@@ -34,6 +45,16 @@ Posts
                <td>{{ post.author }}</td>
                <td>{{ post.post_title }}</td>
                <td>{{ post.post_text|truncatechars:20 }}</td>
+
+                <td>
+                    {# А здесь доступ для каждой ссылки теперь будем проверять отдельно #}
+                    {% if perms.news.change_post %}
+                    <a href="{% url 'post_update' pk=post.id %}">Изменить</a>
+                    {% endif %}
+                    {% if perms.news.delete_post %}
+                    <a href="{% url 'post_delete' post.id %}">Удалить</a>
+                    {% endif %}
+                </td>
 
            </tr>
            {% endfor %}
