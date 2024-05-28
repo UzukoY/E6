@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail, EmailMultiAlternatives, mail_managers, mail_admins
-
+from django.conf import settings
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(label="Email")

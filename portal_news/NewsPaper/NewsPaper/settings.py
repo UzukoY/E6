@@ -170,9 +170,9 @@ DEFAULT_FROM_EMAIL = "sf.news.notification@yandex.ru"
 # Отправка писем менеджерам
 SERVER_EMAIL = "sf.news.notification@yandex.ru"
 MANAGERS = (
-    ('UzukoYu', 'UzukoYu@yandex.com'),
+    ('uzukoyu', 'UzukoYu@yandex.com'),
 )
 
 ADMINS = (
-    ('UzukoYu', 'UzukoYu@yandex.com'),
+    ('uzukoyu', 'UzukoYu@yandex.com'),
 )
