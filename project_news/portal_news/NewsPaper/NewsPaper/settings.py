@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.yandex',
+    'django_apscheduler',
 
 ]
 
@@ -176,3 +177,6 @@ MANAGERS = (
 ADMINS = (
     ('uzukoyu', 'UzukoYu@yandex.com'),
 )
+
+
+APSCHEDULER_DATETIME_FORMAT ='N j, Y, f:s a'

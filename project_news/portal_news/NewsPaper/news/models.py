@@ -74,6 +74,9 @@ class Post(models.Model):
     def __str__(self):
         return self.post_title
 
+    def __str__(self):
+        return self.category_names
+
     def like(self):
         self.post_rating += 1
         self.save()
@@ -89,7 +92,6 @@ class Post(models.Model):
 class PostCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-
 
 
 class Comment(models.Model):
@@ -112,7 +114,7 @@ class Comment(models.Model):
         self.save()
 
 
-class Subscription(models.Model):
+class Subscription(models.Model): #Список подписчиков вместо Subscriber, на пользователя и категорию
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
