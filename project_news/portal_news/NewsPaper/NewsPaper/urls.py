@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from news.views import *
 
 
 urlpatterns = [
@@ -27,5 +28,7 @@ urlpatterns = [
    # подключались к главному приложению с префиксом products/.
     path('products/', include('simpleapp.urls')), # из D3!!
     path('news/', include('news.urls')),
+    # для celery:
+    path('', IndexView.as_view()),
 ]
 

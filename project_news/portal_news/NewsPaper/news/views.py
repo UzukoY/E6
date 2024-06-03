@@ -9,6 +9,9 @@ from django.http import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Exists, OuterRef
 from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse
+from django.views import View
+from .tasks import *
 
 
 def index(request):
@@ -125,3 +128,9 @@ def subscriptions(request):
         'subscriptions.html',
         {'categories': categories_with_subscriptions},
     )
+
+# для отображения celery tasks:
+class IndexView(View):
+    def get(self, request):
+        add.delay()
+        return HttpResponse('Hello!')
