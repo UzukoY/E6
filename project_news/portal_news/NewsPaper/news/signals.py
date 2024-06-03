@@ -38,6 +38,6 @@ from .tasks import *
 
 # Для отправки уведомлений о новых постах через селери:
 @receiver(m2m_changed, sender=PostCategory)
-def subscriber_notify_new_post(instance, **kwargs):
+def send_email_task(instance, **kwargs):
     if kwargs['action'] == 'post_add':
         send_email_task(instance.pk)
