@@ -3,17 +3,19 @@ import time
 from django.core.mail import EmailMultiAlternatives
 from .models import *
 from django.conf import settings
+from django.db.models.signals import m2m_changed
+from django.dispatch import receiver
 
 @shared_task
 def send_email_task(pk):
     post = Post.objects.get(pk=pk)
     categories = post.category_names.all()
     title = post.post_title
-    subscribers_emails = []
+    subscribers_emails = [] #все подписчики на все категории
+
     for category in categories:
-        subscribers_users = category.subscribers.all()
-        for sub_user in subscribers_users:
-            subscribers_emails.append(sub_user.email)
+        subscribers_emails += list(Subscription.objects.filter(category=category).values_list('user__email', flat=True))
+
     html_content = (
         f'Пост: {instance.post_title}<br>'
         f'Текст: {instance.post_text}<br><br>'
@@ -25,7 +27,7 @@ def send_email_task(pk):
         subject=title,
         body='',
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers_emails,
+        to=set(subscribers_emails),
     )
 
     msg.attach_alternative(html_content, 'text/html')

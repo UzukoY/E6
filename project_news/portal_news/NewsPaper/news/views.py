@@ -12,6 +12,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.http import HttpResponse
 from django.views import View
 from .tasks import *
+from .signals import *
 
 
 def index(request):
@@ -84,6 +85,12 @@ class PostCreate(LoginRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'posts_edit.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.save()
+        return super().form_valid(form)
+
 
 class PostUpdate(UpdateView):
     permission_required = ("news.change_post",)
