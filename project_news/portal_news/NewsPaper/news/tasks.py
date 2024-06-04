@@ -1,6 +1,6 @@
-from celery import shared_task, app
-import time
-from django.core.mail import EmailMultiAlternatives
+from celery import shared_task
+import datetime
+from django.core.mail import EmailMultiAlternatives, send_mail, mail_managers
 from .models import *
 from django.conf import settings
 from django.db.models.signals import m2m_changed
@@ -17,9 +17,9 @@ def send_email_task(pk):
         subscribers_emails += list(Subscription.objects.filter(category=category).values_list('user__email', flat=True))
 
     html_content = (
-        f'Пост: {instance.post_title}<br>'
-        f'Текст: {instance.post_text}<br><br>'
-        f'<a href="http://127.0.0.1:8000{instance.get_absolute_url()}">'
+        f'Пост: {post.post_title}<br>'
+        f'Текст: {post.post_text}<br><br>'
+        f'<a href="http://127.0.0.1:8000{post.get_absolute_url()}">'
         f'Ссылка на пост</a>'
     )
 
