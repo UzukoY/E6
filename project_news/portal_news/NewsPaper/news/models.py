@@ -88,6 +88,10 @@ class Post(models.Model):
     def preview(self):
         return '{} ... {}'.format(self.post_text[0:128], str(self.post_rating))
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)  # сначала вызываем метод родителя, чтобы объект сохранился
+        cache.delete(f'product-{self.pk}')  # затем удаляем его из кэша, чтобы сбросить его
+
 
 class PostCategory(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)

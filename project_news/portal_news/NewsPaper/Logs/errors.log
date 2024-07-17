@@ -1,0 +1,22 @@
+2024-07-14 21:39:44,988 INFO "GET /news/?page=1 HTTP/1.1" 200 6611 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-07-14 21:39:45,038 INFO "GET /static/css/styles.css HTTP/1.1" 200 236765 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-07-14 21:39:45,261 WARNING Not Found: /news/assets/favicon.ico D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\utils\log.py None
+2024-07-14 21:39:45,262 WARNING "GET /news/assets/favicon.ico HTTP/1.1" 404 3913 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-07-14 21:39:48,509 INFO "GET /news/?post_title__icontains=&post_text__icontains=&added_after= HTTP/1.1" 200 6760 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-07-14 21:39:52,774 INFO "GET /news/?post_title__icontains=&post_text__icontains=&added_after=&page=2 HTTP/1.1" 200 6972 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-07-14 21:39:54,259 INFO "GET /news/?post_title__icontains=&post_text__icontains=&added_after=&page=1 HTTP/1.1" 200 6760 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-07-14 21:39:58,931 INFO "GET /news/?post_title__icontains=&post_text__icontains=&added_after=&page=5 HTTP/1.1" 200 7285 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None
+2024-07-14 21:47:07,179 ERROR Internal Server Error: / D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\utils\log.py (<class 'NameError'>, NameError("name 'add' is not defined"), <traceback object at 0x000002C9B113D500>)
+Traceback (most recent call last):
+  File "D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\views\generic\base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\views\generic\base.py", line 143, in dispatch
+    return handler(request, *args, **kwargs)
+  File "D:\Fullstack\Django\Django_news\project_news\portal_news\NewsPaper\news\views.py", line 144, in get
+    add.delay()
+NameError: name 'add' is not defined
+2024-07-14 21:47:07,182 ERROR "GET / HTTP/1.1" 500 83412 D:\Fullstack\Django\Django_news\project_news\portal_news\.venv\lib\site-packages\django\core\servers\basehttp.py None

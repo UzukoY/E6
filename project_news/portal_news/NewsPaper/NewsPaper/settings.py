@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+import logging
+
+logger = logging.getLogger('django')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,6 +28,146 @@ SECRET_KEY = 'django-insecure-9mg&+95ezr=4nb5r1i9c2qo_ema!os2%o=7@gbc^rtm#_#^d(@
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'style' : '{',
+    'formatters': {
+        'base': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+        'warning': {
+            'format': '%(levelname)s %(asctime)s %(message)s %(pathname)s'
+        },
+        'errors': {
+            'format': '%(levelname)s %(asctime)s %(message)s %(pathname)s %(exc_info)s'
+        },
+        'errors-mail': {
+            'format': '%(levelname)s %(asctime)s %(message)s %(pathname)s'
+        },
+        'base_to_file': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s'
+        },
+        'errors_to_file': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s'
+        }
+        },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console_debug': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'base'
+        },
+        'console_info': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'base'
+        },
+        'file_info': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'formatter': 'base_to_file',
+            'filename': './Logs/general.log',
+        },
+        'file_security': {
+            'level': 'INFO',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'formatter': 'base_to_file',
+            'filename': './Logs/security.log',
+        },
+
+        # WARNING
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'warning'
+        },
+
+        # ERROR & CRITICAL
+        'console_error': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'errors'
+        },
+        'console_critical': {
+            'level': 'CRITICAL',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'errors'
+        },
+        'file_error': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'formatter': 'errors_to_file',
+            'filename': './Logs/errors.log'
+        },
+        'file_critical': {
+            'level': 'CRITICAL',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'formatter': 'errors_to_file',
+            'filename': './Logs/errors.log'
+        },
+        'mail_admins_critical': {
+            'level': 'CRITICAL',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            'formatter': 'errors'
+
+        }
+
+    },
+
+
+    'loggers': {
+        'django': {
+            'handlers': ['console_debug', 'console_info', 'console_warning', 'console_error', 'console_critical'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins_critical', 'file_error'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['mail_admins_critical','file_error'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['file_error'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['file_security'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    }
+}
 
 ALLOWED_HOSTS = []
 
@@ -64,6 +207,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+
 ]
 
 ROOT_URLCONF = 'NewsPaper.urls'
@@ -188,3 +332,12 @@ CELERY_RESULT_BACKEND = 'redis://localhost:6379'
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
+
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'), # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+        'TIMEOUT': 30,
+    }
+}
