@@ -1,0 +1,11 @@
+{% load socialaccount %}
+<html>
+<body>
+    <h1>My Yandex OAuth Project</h1>
+    {% if user.is_authenticated %}
+    <p>Welcome, you're logged in as {{ user.username }}</p>>
+    {% else %}
+    <a href="{% provider_login_url 'yandex' %}">Login with Yandex</a>
+    {% endif %}
+</body>
+</html>
