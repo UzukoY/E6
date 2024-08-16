@@ -1,0 +1,13 @@
+
+{% extends 'flatpages/default.html' %}
+
+<!-- Название у нас будет products -->
+{% block title %}
+Ads
+{% endblock title %}
+
+<!-- В контенте на странице мы выводим все товары -->
+{% block content %}
+<h1>Все объявления</h1>
+{{ ads }}
+{% endblock content %}
