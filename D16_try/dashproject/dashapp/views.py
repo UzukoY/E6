@@ -13,7 +13,7 @@ from django.views.generic import (
 from django_ckeditor_5.fields import CKEditor5Field
 from datetime import datetime
 
-# from .filters import AdFilter, UserResponseFilter
+from .filters import AdFilter, UserResponseFilter
 # from .forms import *
 from .models import *
 from pprint import pprint
@@ -26,17 +26,17 @@ class AdsList(ListView):
     context_object_name = 'ads'
     paginate_by = 2
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     self.filterset = AdFilter(self.request.GET, queryset)
-    #     return self.filterset.qs
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['time_now'] = datetime.utcnow()
-    #     context['filterset'] = self.filterset
-    #     pprint(context)
-    #     return context
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = AdFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['time_now'] = datetime.datetime.utcnow()
+        context['filterset'] = self.filterset
+        pprint(context)
+        return context
 
 
 class MyAdsList(LoginRequiredMixin, ListView):
@@ -48,17 +48,17 @@ class MyAdsList(LoginRequiredMixin, ListView):
     context_object_name = 'my_ads'
     paginate_by = 10
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     self.filterset = AdFilter(self.request.GET, queryset)
-    #     return self.filterset.qs
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_url_myads'] = self.request.path == '/ads/myads/'
-    #     context['filterset'] = self.filterset
-    #     pprint(context)
-    #     return context
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = AdFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_url_myads'] = self.request.path == '/ads/myads/'
+        context['filterset'] = self.filterset
+        pprint(context)
+        return context
 
 
 class AdDetail(DetailView):
@@ -125,16 +125,16 @@ class MyResponsesList(LoginRequiredMixin, ListView):
     context_object_name = 'responses'
     paginate_by = 10
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     self.filterset = UserResponseFilter(self.request.GET, queryset)
-    #     return self.filterset.qs
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_url_myads'] = self.request.path == '/ads/responses/'
-    #     context['filterset'] = self.filterset
-    #     return context
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = UserResponseFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_url_myads'] = self.request.path == '/ads/responses/'
+        context['filterset'] = self.filterset
+        return context
 
 
 class AdResponsesList(ListView):
