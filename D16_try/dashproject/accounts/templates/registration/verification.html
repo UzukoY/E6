@@ -1,0 +1,20 @@
+{% extends 'default.html' %}
+{% load bootstrap4 %}
+
+{% block content %}
+<h1>Код подтверждения</h1>
+<form method="post" action="" class="uniForm">
+    {% csrf_token %}
+    {% if messages %}
+        <div class="alert alert-block alert-primary">
+            <ul class="m-0">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <input class="btn btn-secondary" type="submit" value="Подтвердить">
+</form>
+<p><a href="{% url 'login' %}" class="text-muted">Войти</a></p>
+{% endblock %}

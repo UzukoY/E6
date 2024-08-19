@@ -144,13 +144,13 @@ class AdResponsesList(ListView):
     template_name = 'ad_responses.html'
     context_object_name = 'ad_responses'
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     self.filterset = AdFilter(self.request.GET, queryset)
-    #     return self.filterset.qs
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['is_url_myads'] = self.request.path == '/ads/responses/'
-    #     context['filterset'] = self.filterset
-    #     return context
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = AdFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_url_myads'] = self.request.path == '/ads/responses/'
+        context['filterset'] = self.filterset
+        return context

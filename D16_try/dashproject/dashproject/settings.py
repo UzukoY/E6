@@ -141,6 +141,54 @@ STATICFILES_DIRS = [
 ]
 
 
+LOGIN_REDIRECT_URL = "/news"
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+ACCOUNT_FORMS = {"signup": "accounts.forms.CustomSignupForm"}
+
+# Отправка писем на email
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = "sf.news.notification"
+EMAIL_HOST_PASSWORD = "fzfvltflumyurcpv"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = "sf.news.notification@yandex.ru"
+
+# Отправка писем менеджерам
+SERVER_EMAIL = "sf.news.notification@yandex.ru"
+MANAGERS = (
+    ('uzukoyu', 'UzukoYu@yandex.com'),
+)
+
+ADMINS = (
+    ('uzukoyu', 'UzukoYu@yandex.com'),
+)
+
+
+APSCHEDULER_DATETIME_FORMAT ='N j, Y, f:s a'
+
+
+# Данные для Redis:
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+
 CKEDITOR_5_CONFIGS = {
     'default': {
         'toolbar': ['heading', '|', 'bold', 'italic', 'link',
