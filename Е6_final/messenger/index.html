@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мессенджер</title>
+</head>
+<body>
+    <h1>Мессенджер</h1>
+
+    <h2>Пользователи</h2>
+    <ul id="user-list"></ul>
+
+    <h2>Чаты</h2>
+    <ul id="chat-list"></ul>
+
+   <h3>Создать новый чат</h3>
+<input type="text" id="new-chat-name" placeholder="Введите название чата">
+<select id="new-chat-users" multiple>
+    <!-- Список пользователей будет заполнен через JS -->
+</select>
+<button onclick="createChat()">Создать чат</button>
+
+    <h2>Сообщения</h2>
+    <div id="chat-window">
+        <div id="messages"></div>
+        <input type="text" id="new-message" placeholder="Введите сообщение">
+        <button onclick="sendMessage()">Отправить</button>
+        <button onclick="deleteChat()">Удалить чат</button>
+    </div>
+
+<script>
+let currentChatId = null; // Инициализируем переменную для текущего чата
+
+async function fetchUsers() {
+    const response = await fetch('/api/users/');
+    const users = await response.json();
+    const userListElement = document.getElementById('new-chat-users');
+
+    users.forEach(user => {
+        const option = document.createElement('option');
+        option.value = user.id;
+        option.textContent = user.username;
+        userListElement.appendChild(option);
+    });
+}
+
+async function createChat() {
+    const chatNameInputElement = document.getElementById('new-chat-name');
+    const chatName = chatNameInputElement.value;
+    const usersSelectElement = document.getElementById('new-chat-users');
+    const selectedUsers = Array.from(usersSelectElement.selectedOptions).map(option => option.value);
+
+    if (!chatName) {
+        alert("Пожалуйста, введите название чата.");
+        return;
+    }
+
+    const response = await fetch('/api/chats/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: chatName,
+            users: selectedUsers  // Передаем выбранных пользователей
+        })
+    });
+
+    if (!response.ok) {
+        console.error("Ошибка при создании чата:", response.statusText);
+        return;
+    }
+
+    chatNameInputElement.value = '';
+    fetchChats();
+}
+
+async function fetchMessages(chatId) {
+   const response = await fetch(`/api/chats/${chatId}/messages/`);
+
+   if (!response.ok) {
+       console.error("Ошибка при загрузке сообщений:", response.statusText);
+       return;
+   }
+
+   const messages = await response.json();
+
+   const messagesElement = document.getElementById('messages');
+   messagesElement.innerHTML = ''; // Очистить сообщения
+
+   messages.forEach(message => {
+       const div = document.createElement('div');
+       div.textContent = `${message.user.username}: ${message.text}`;
+       messagesElement.appendChild(div);
+   });
+}
+
+async function sendMessage() {
+   const messageInputElement = document.getElementById('new-message');
+   const messageText = messageInputElement.value;
+
+   if (!currentChatId) {
+       alert("Пожалуйста, выберите чат перед отправкой сообщения.");
+       return;
+   }
+
+   await fetch(`/api/chats/${currentChatId}/messages/`, {
+       method: 'POST',
+       headers: {
+           'Content-Type': 'application/json',
+           // Добавляем при необходимости заголовок авторизации.
+           // 'Authorization': 'Token YOUR_TOKEN_HERE'
+       },
+       body: JSON.stringify({ text: messageText })
+   });
+
+   messageInputElement.value = ''; // Очистить поле ввода сообщения
+
+   // Обновляем список сообщений после отправки.
+   fetchMessages(currentChatId);
+}
+
+async function createChat() {
+   const chatNameInputElement = document.getElementById('new-chat-name');
+   const chatName = chatNameInputElement.value;
+
+   if (!chatName) {
+       alert("Пожалуйста, введите название чата.");
+       return;
+   }
+
+   const response = await fetch('/api/chats/', {
+       method: 'POST',
+       headers: {
+           'Content-Type': 'application/json',
+           // Добавляем при необходимости заголовок авторизации.
+           // 'Authorization': 'Token YOUR_TOKEN_HERE'
+       },
+       body: JSON.stringify({ name: chatName })
+   });
+
+   if (!response.ok) {
+       console.error("Ошибка при создании чата:", response.statusText);
+       return;
+   }
+
+   chatNameInputElement.value = ''; // Очистить поле ввода названия чата
+
+   // Обновляем список чатов после создания нового.
+   fetchChats();
+}
+
+async function deleteChat() {
+   if (!currentChatId) {
+       alert("Пожалуйста, выберите чат для удаления.");
+       return;
+   }
+
+   const response = await fetch(`/api/chats/${currentChatId}/`, {
+       method: 'DELETE',
+       headers: {
+           // Добавляем при необходимости заголовок авторизации.
+           // 'Authorization': 'Token YOUR_TOKEN_HERE'
+       }
+   });
+
+   if (!response.ok) {
+       console.error("Ошибка при удалении чата:", response.statusText);
+       return;
+   }
+
+   currentChatId = null; // Сбросить текущий ID чата
+   alert("Чат удален.");
+
+   // Обновляем список чатов после удаления.
+   fetchChats();
+}
+
+// Инициализация при загрузке страницы.
+fetchUsers();
+fetchChats();
+</script>
+</body>
+</html>
